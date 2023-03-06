@@ -10,17 +10,6 @@ class ClusterNode(object):
             self.samples = {samples}
         self.n_samples = len(self.samples)
 
-def Jaccard(v1,v2):
-    union = 0
-    int = 0
-    for i,j in zip(v1,v2):
-        if i == 1 and j == 1:
-            int += 1
-            union += 1
-        elif i == 1 or j == 1:
-            union += 1
-    return round(1- int / union,3)
-
 class HierarchicalClustering(object):
 
     def __init__(self, samples = None, target = 1, linkage = 'avglkge', metric = jaccard_distance):
