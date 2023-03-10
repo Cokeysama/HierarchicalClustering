@@ -1,4 +1,3 @@
-import DistMeasures
 from DistMeasures import jaccard_distance
 
 class ClusterNode(object):
@@ -55,13 +54,14 @@ class HierarchicalClustering(object):
                 for j in range(i + 1, n_samples):
                     dist = distMatrix[i][j]
                     distlist.append(({i},{j},dist))
-            self.distsort = sorted(distlist, key=lambda d:d[1])
+            self.distsort = sorted(distlist, key=lambda d:d[2])
 
     def __merge_mix(self):
         cluster1, cluster2 = self.distsort[0][0], self.distsort[0][1]
         merge_node1,merge_node2 = None,None
         i = 0
         while merge_node1 is None or merge_node2 is None:
+
             if self.clusters[i].samples == cluster1:
                 merge_node1 = self.clusters[i]
                 self.clusters.pop(i)
@@ -78,13 +78,13 @@ class HierarchicalClustering(object):
         new_CL = self.clusters[-1]
         del_id1, del_id2 = distsort[0][0], distsort[0][1]
         for i in range(len(distsort)-1,-1,-1):
-            if del_id1 == distsort[i][0] or del_id2 == distsort[i][0]:
+            if del_id1 == distsort[i][0] or del_id2 == distsort[i][0] or del_id1 == distsort[i][1] or del_id2 == distsort[i][1]:
                 distsort.pop(i)
         for i in self.clusters[:-1]:
             dist = self.avglkge(i,new_CL)
             new_sortitem = (i.samples,new_CL.samples,dist)
             distsort.append(new_sortitem)
-        self.distsort = sorted(distsort, key=lambda d: d[1])
+        self.distsort = sorted(distsort, key=lambda d: d[2])
 
 
 
@@ -103,22 +103,10 @@ def main():
                [0, 1, 1, 0, 0, 0, 1, 1, 0],
                [0, 1, 0, 0, 1, 1, 0, 1, 0],
                [1, 0, 0, 1, 0, 1, 1, 1, 0],
-               [0, 0, 1, 0, 0, 0, 1, 0, 1],]
+               [0, 1, 1, 0, 0, 0, 1, 0, 1],]
     fit = HierarchicalClustering(samples)
-
-    print(fit.distMatrix)
-
     fit.clustering()
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
